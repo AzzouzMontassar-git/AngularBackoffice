@@ -11,6 +11,8 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';  // Import ReactiveFormsModule
+import { HttpClientModule } from '@angular/common/http';
+
 
 
 @NgModule({
@@ -27,7 +29,8 @@ import { FooterComponent } from './footer/footer.component';  // Import Reactive
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    RouterModule,    // Assurez-vous d'importer RouterModule ici
+    RouterModule,
+    HttpClientModule,    // Assurez-vous d'importer RouterModule ici
     FormsModule      // Importez FormsModule pour lier ngModel dans vos formulaires
   ],
   providers: [],

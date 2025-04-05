@@ -10,7 +10,6 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent }, // Add the route for the sidebar test
 
   // Ajoutez ici d'autres routes si nécessaire
-  { path: '', redirectTo: '/login', pathMatch: 'full' } // Default route to login
 ];
 
 @NgModule({

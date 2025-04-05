@@ -1,26 +1,51 @@
-import { Component } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthServiceService } from '../services/auth-service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  templateUrl: './login.component.html'
 })
-export class LoginComponent {
-  loginForm: FormGroup;
+export class LoginComponent implements OnInit {
 
-  constructor(private fb: FormBuilder) {
+  loginForm!: FormGroup;
+  errorMessage: string = '';
+
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthServiceService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
     this.loginForm = this.fb.group({
       usernameOrEmail: ['', Validators.required],
       password: ['', Validators.required],
-      rememberMe: [false] // default to false
+      rememberMe: [false]
     });
   }
 
-  onSubmit() {
-    if (this.loginForm.valid) {
-      console.log(this.loginForm.value);
-      // Handle form submission logic here
-    }
+  onSubmit(): void {
+    if (this.loginForm.invalid) return;
+
+    const loginData = {
+      email: this.loginForm.value.usernameOrEmail,
+      password: this.loginForm.value.password
+    };
+
+    this.authService.login(loginData).subscribe({
+      next: (response) => {
+        this.authService.saveToken(response.token);
+        this.router.navigate(['/dashboard']); // Redirige après login
+      },
+      error: (err) => {
+        if (err.status === 401) {
+          this.errorMessage = 'Email ou mot de passe incorrect.';
+        } else {
+          this.errorMessage = 'Erreur lors de la connexion. Veuillez réessayer.';
+        }
+      }
+    });
   }
 }
